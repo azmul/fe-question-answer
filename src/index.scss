@@ -1,0 +1,28 @@
+body {
+    margin: 0;
+    overflow-x: hidden;
+    font-family: "Roboto", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: 8px;
+}
+
+:root {
+    --color-primary: rgba(255, 255, 0, 0.1);
+    --color-secondary: rgba(255, 255, 0, 0.3);
+    --color-tertiary: rgba(255, 255, 0, 0.4);
+    --color-quaternary: rgba(255, 255, 0, 0.6);
+    --color-quinary: rgba(255, 255, 0, 0.9);
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+ul {
+    li {
+        list-style-type: none;
+    }
+}

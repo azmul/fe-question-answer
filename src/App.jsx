@@ -1,17 +1,10 @@
-import { Button, Space } from "antd";
+import Header from "./components/Header";
 
 function App() {
   return (
     <>
-      <Space wrap>
-        <Button type="primary" loading>
-          Primary Button
-        </Button>
-        <Button>Default Button</Button>
-        <Button type="dashed">Dashed Button</Button>
-        <Button type="text">Text Button</Button>
-        <Button type="link">Link Button</Button>
-      </Space>
+      <Header />
+      <main className="container-xxl">Home</main>
     </>
   );
 }

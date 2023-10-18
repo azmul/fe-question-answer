@@ -1,0 +1,17 @@
+/* make container based on device */
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1390px
+);
+
+@each $breakpoint,
+$container-max-width in $container-max-widths {
+  .container-#{$breakpoint} {
+    max-width: $container-max-width;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
