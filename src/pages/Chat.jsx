@@ -7,15 +7,15 @@ function Chat() {
   const [loading, setLoading] = useState(false);
 
   const onFinish = async (values) => {
-    console.log(values);
     setLoading(true);
-    const rawResponse = await fetch("http://127.0.0.1:8000/api/v1/answer", {
+    const rawResponse = await fetch("http://127.0.0.1:8000/api/v1/answers", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        id: 2,
         question: values.question,
         lang: values.lang,
       }),
