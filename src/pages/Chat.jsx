@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Form, Input, Select } from "antd";
 import Typewriter from "typewriter-effect";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import { useStore } from "../Store";
 import { API_URL } from "../constant";
 

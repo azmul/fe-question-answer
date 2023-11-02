@@ -1,6 +1,6 @@
 import { Button, Space } from "antd";
 import { Link } from "react-router-dom";
-import { useStore } from "../Store";
+import { useStore } from "../../Store";
 import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.scss";
 
@@ -14,7 +14,7 @@ function Header() {
   });
   function handleLogout() {
     addUser(null);
-    navigate("/login");
+    navigate("/sign-in");
   }
   return (
     <div className="container-md">

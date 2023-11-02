@@ -1,6 +1,15 @@
 import { useState, useEffect, useCallback } from "react";
-import { Button, Form, Input, Modal, Card, Space, Popconfirm } from "antd";
-import Header from "../components/Header";
+import {
+  Button,
+  Form,
+  Input,
+  Modal,
+  Card,
+  Space,
+  Popconfirm,
+  Result,
+} from "antd";
+import Header from "../components/Header/Header";
 import { useStore } from "../Store";
 import { API_URL } from "../constant";
 
@@ -121,7 +130,7 @@ const CollectionEditForm = ({ open, onEdit, onCancel, article, loading }) => {
   );
 };
 
-function Document() {
+function Article() {
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [article, setArticle] = useState(null);
@@ -220,7 +229,7 @@ function Document() {
               setOpen(true);
             }}
           >
-            New Article
+            Add Article
           </Button>
           <CollectionCreateForm
             open={open}
@@ -242,33 +251,51 @@ function Document() {
           />
         </div>
         <br />
-        {articles?.map((article) => (
-          <Card
-            key={article?.id}
-            title={article?.title}
-            extra={
-              <Space>
-                <Button type="primary" onClick={() => handleEdit(article)}>
-                  Edit
-                </Button>
-                <Popconfirm
-                  title="Delete"
-                  description="Are you sure want to delete?"
-                  onConfirm={() => handleDelete(article.id)}
-                >
-                  <Button type="link" danger>
-                    Delete
+        {articles && articles.length > 0 ? (
+          articles?.map((article) => (
+            <Card
+              key={article?.id}
+              title={article?.title}
+              extra={
+                <Space>
+                  <Button type="primary" onClick={() => handleEdit(article)}>
+                    Edit
                   </Button>
-                </Popconfirm>
-              </Space>
+                  <Popconfirm
+                    title="Delete"
+                    description="Are you sure want to delete?"
+                    onConfirm={() => handleDelete(article.id)}
+                  >
+                    <Button type="link" danger>
+                      Delete
+                    </Button>
+                  </Popconfirm>
+                </Space>
+              }
+            >
+              <p>{article?.content}</p>
+            </Card>
+          ))
+        ) : (
+          <Result
+            status="warning"
+            title="There are no articles"
+            extra={
+              <Button
+                type="primary"
+                onClick={() => {
+                  setOpen(true);
+                }}
+                key="create-new-article"
+              >
+                Add New Article
+              </Button>
             }
-          >
-            <p>{article?.content}</p>
-          </Card>
-        ))}
+          />
+        )}
       </main>
     </>
   );
 }
 
-export default Document;
+export default Article;

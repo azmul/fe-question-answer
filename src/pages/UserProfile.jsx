@@ -5,9 +5,9 @@ import {
 } from "@ant-design/icons";
 import { Card } from "antd";
 import { useStore } from "../Store";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 
-function Profile() {
+function UserProfile() {
   const { user } = useStore((state) => {
     return {
       user: state.user,
@@ -27,13 +27,13 @@ function Profile() {
           title="User Info"
         >
           <p>
-            Name: <b> {user.name}</b>
+            Name: <b> {user?.name}</b>
           </p>
           <p>
-            ID: <b> {user.id}</b>
+            ID: <b> {user?.id}</b>
           </p>
           <p>
-            Email: <b>{user.username}</b>
+            Email: <b>{user?.username}</b>
           </p>
         </Card>
       </div>
@@ -41,4 +41,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default UserProfile;
