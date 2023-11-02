@@ -1,19 +1,24 @@
 import { createBrowserRouter } from "react-router-dom";
-import App from "./App.jsx";
 import Chat from "./pages/Chat.jsx";
 import Document from "./pages/Document.jsx";
+import Login from "./pages/Login.jsx";
+import Profile from "./pages/Profile.jsx";
 
 export const routers = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-  },
   {
     path: "/chat",
     element: <Chat />,
   },
   {
-    path: "/document",
+    path: "/",
     element: <Document />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
 ]);

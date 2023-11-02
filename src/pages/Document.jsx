@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button, Form, Input, Modal, Card, Space, Popconfirm } from "antd";
 import Header from "../components/Header";
+import { useStore } from "../Store";
 
 // eslint-disable-next-line react/prop-types
 const CollectionCreateForm = ({ open, onCreate, onCancel, loading }) => {
@@ -126,20 +127,28 @@ function Document() {
   const [loading, setLoading] = useState(false);
   const [articles, setArticles] = useState([]);
 
-  const getContents = async () => {
-    const rawResponse = await fetch("http://127.0.0.1:8000/api/v1/users/2", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhem11bGdAZ21haWwuY29tIiwiZXhwIjoxNjk4MDM4NDIwfQ.mx0EaqqtZbn-EDeKtP6sQO7iKbiwGmFeMyRX6Rb1-8U",
-      },
-    });
+  const { user } = useStore((state) => {
+    return {
+      user: state.user,
+    };
+  });
 
-    const user = await rawResponse.json();
-    setArticles(user.articles);
-  };
+  const getContents = useCallback(async () => {
+    const rawResponse = await fetch(
+      `http://127.0.0.1:8000/api/v1/users/${user.id}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.access_token}`,
+        },
+      }
+    );
+
+    const content = await rawResponse.json();
+    setArticles(content.articles);
+  }, [user.access_token, user.id]);
 
   const onCreate = async (values) => {
     setLoading(true);
@@ -151,7 +160,7 @@ function Document() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id: 2,
+        user_id: user.id,
         title: values.title,
         content: values.content,
       }),
@@ -200,7 +209,7 @@ function Document() {
 
   useEffect(() => {
     getContents();
-  }, []);
+  }, [getContents]);
 
   return (
     <>

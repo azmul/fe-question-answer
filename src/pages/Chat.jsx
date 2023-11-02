@@ -1,12 +1,21 @@
 import { useState } from "react";
 import { Button, Form, Input, Select } from "antd";
+import Typewriter from "typewriter-effect";
 import Header from "../components/Header";
+import { useStore } from "../Store";
 
 function Chat() {
   const [answer, setAnswer] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const { user } = useStore((state) => {
+    return {
+      user: state.user,
+    };
+  });
+
   const onFinish = async (values) => {
+    setAnswer(null);
     setLoading(true);
     const rawResponse = await fetch("http://127.0.0.1:8000/api/v1/answers", {
       method: "POST",
@@ -15,7 +24,7 @@ function Chat() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: 2,
+        id: user.id,
         question: values.question,
         lang: values.lang,
       }),
@@ -46,7 +55,7 @@ function Chat() {
         >
           <Form.Item
             name="lang"
-            label="Select a Language to Get Your Answer"
+            label="Select a Language for questioning and answering!!!"
             rules={[
               {
                 required: true,
@@ -94,7 +103,15 @@ function Chat() {
             </Button>
           </Form.Item>
         </Form>
-        {answer && answer.answer}
+        {answer && answer.answer && (
+          <Typewriter
+            options={{
+              strings: answer.answer,
+              autoStart: true,
+              delay: 55,
+            }}
+          />
+        )}
       </main>
     </>
   );

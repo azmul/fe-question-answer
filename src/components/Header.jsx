@@ -1,24 +1,42 @@
 import { Button, Space } from "antd";
 import { Link } from "react-router-dom";
+import { useStore } from "../Store";
+import { useNavigate } from "react-router-dom";
+import styles from "./Header.module.scss";
 
 function Header() {
+  const navigate = useNavigate();
+
+  const { addUser } = useStore((state) => {
+    return {
+      addUser: state.addUser,
+    };
+  });
+  function handleLogout() {
+    addUser(null);
+    navigate("/login");
+  }
   return (
-    <>
-      <Space wrap>
+    <div className="container-md">
+      <Space wrap className={styles.header}>
         <Button type="link">
           {" "}
-          <Link to="/">Home</Link>
-        </Button>
-        <Button type="link">
-          {" "}
-          <Link to="/document">Document</Link>
+          <Link to="/">Document</Link>
         </Button>
         <Button type="link">
           {" "}
           <Link to="/chat">Chat</Link>
         </Button>
+        <Button type="link">
+          {" "}
+          <Link to="/profile">Profile</Link>
+        </Button>
+        <Button type="link" onClick={handleLogout}>
+          {" "}
+          Logout{" "}
+        </Button>
       </Space>
-    </>
+    </div>
   );
 }
 
