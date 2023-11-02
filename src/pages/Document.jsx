@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Button, Form, Input, Modal, Card, Space, Popconfirm } from "antd";
 import Header from "../components/Header";
 import { useStore } from "../Store";
+import { API_URL } from "../constant";
 
 // eslint-disable-next-line react/prop-types
 const CollectionCreateForm = ({ open, onCreate, onCancel, loading }) => {
@@ -134,17 +135,14 @@ function Document() {
   });
 
   const getContents = useCallback(async () => {
-    const rawResponse = await fetch(
-      `http://127.0.0.1:8000/api/v1/users/${user.id}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.access_token}`,
-        },
-      }
-    );
+    const rawResponse = await fetch(`${API_URL}/api/v1/users/${user.id}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.access_token}`,
+      },
+    });
 
     const content = await rawResponse.json();
     setArticles(content.articles);
@@ -153,7 +151,7 @@ function Document() {
   const onCreate = async (values) => {
     setLoading(true);
     setLoading(true);
-    await fetch("http://127.0.0.1:8000/api/v1/articles", {
+    await fetch(`${API_URL}/api/v1/articles`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -174,7 +172,7 @@ function Document() {
   const onEdit = async (values) => {
     setLoading(true);
     setLoading(true);
-    await fetch(`http://127.0.0.1:8000/api/v1/articles/${article.id}`, {
+    await fetch(`${API_URL}/api/v1/articles/${article.id}`, {
       method: "PATCH",
       headers: {
         Accept: "application/json",
@@ -197,7 +195,7 @@ function Document() {
   };
 
   const handleDelete = async (id) => {
-    await fetch(`http://127.0.0.1:8000/api/v1/articles/${id}`, {
+    await fetch(`${API_URL}/api/v1/articles/${id}`, {
       method: "DELETE",
       headers: {
         Accept: "application/json",

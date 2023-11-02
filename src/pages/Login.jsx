@@ -1,6 +1,7 @@
 import { Button, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../Store";
+import { API_URL } from "../constant";
 
 function Login() {
   const navigate = useNavigate(); // <-- get history from hook
@@ -17,7 +18,7 @@ function Login() {
       let formData = new FormData();
       formData.append("username", values.username);
       formData.append("password", values.password);
-      const rawResponse = await fetch("http://127.0.0.1:8000/login", {
+      const rawResponse = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
           Accept: "application/json",

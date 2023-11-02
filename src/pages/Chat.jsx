@@ -3,6 +3,7 @@ import { Button, Form, Input, Select } from "antd";
 import Typewriter from "typewriter-effect";
 import Header from "../components/Header";
 import { useStore } from "../Store";
+import { API_URL } from "../constant";
 
 function Chat() {
   const [answer, setAnswer] = useState(null);
@@ -17,7 +18,7 @@ function Chat() {
   const onFinish = async (values) => {
     setAnswer(null);
     setLoading(true);
-    const rawResponse = await fetch("http://127.0.0.1:8000/api/v1/answers", {
+    const rawResponse = await fetch(`${API_URL}/api/v1/answers`, {
       method: "POST",
       headers: {
         Accept: "application/json",
