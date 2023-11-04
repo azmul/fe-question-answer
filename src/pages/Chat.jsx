@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Button, Form, Input, Select } from "antd";
+import { minBy, maxBy, upperFirst } from "lodash";
 import Typewriter from "typewriter-effect";
 import Header from "../components/Header/Header";
 import { useStore } from "../Store";
 import { API_URL } from "../constant";
+import { calculateSimilarity } from "../helpers/similarity";
 
 function Chat() {
   const [answer, setAnswer] = useState(null);
@@ -30,9 +32,48 @@ function Chat() {
         lang: values.lang,
       }),
     });
-    const content = await rawResponse.json();
+    const response = await rawResponse.json();
+
+    const minContent = minBy(response.data, function (item) {
+      return item.answer.length;
+    });
+
+    const contents = response.data.filter(
+      (item) => item.model != minContent.model
+    );
+
+    const similarity = calculateSimilarity(
+      contents[0].answer,
+      contents[1].answer
+    );
+
+    if (similarity < 50) {
+      let answer = "";
+      if (contents[0].answer.length > 30) {
+        answer += upperFirst(contents[0].answer);
+      }
+      if (contents[1].answer.length > 30) {
+        answer += `. ${upperFirst(contents[1].answer)}`;
+      }
+      if (contents[0].answer.length < 30 && contents[1].answer.length < 30) {
+        if (contents[0].answer.length === contents[1].answer.length) {
+          answer += `. ${upperFirst(contents[1].answer)}`;
+        } else {
+          const maxContent = maxBy(contents, function (item) {
+            return item.answer.length;
+          });
+          answer += maxContent.answer;
+        }
+      }
+      setAnswer(answer);
+    } else {
+      const maxContent = maxBy(contents, function (item) {
+        return item.answer.length;
+      });
+      setAnswer(maxContent.answer);
+    }
+
     setLoading(false);
-    setAnswer(content);
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -104,12 +145,12 @@ function Chat() {
             </Button>
           </Form.Item>
         </Form>
-        {answer && answer.answer && (
+        {answer && (
           <Typewriter
             options={{
-              strings: answer.answer,
+              strings: answer,
               autoStart: true,
-              delay: 55,
+              delay: 15,
             }}
           />
         )}

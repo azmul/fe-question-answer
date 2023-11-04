@@ -216,7 +216,7 @@ function Article() {
 
   useEffect(() => {
     getContents();
-  }, [getContents]);
+  }, []);
 
   return (
     <>
