@@ -50,19 +50,19 @@ function Chat() {
     if (similarity < 50) {
       let answer = "";
       if (contents[0].answer.length > 30) {
-        answer += upperFirst(contents[0].answer);
+        answer += upperFirst(contents[0].translate_text);
       }
       if (contents[1].answer.length > 30) {
-        answer += `. ${upperFirst(contents[1].answer)}`;
+        answer += `. ${upperFirst(contents[1].translate_text)}`;
       }
       if (contents[0].answer.length < 30 && contents[1].answer.length < 30) {
         if (contents[0].answer.length === contents[1].answer.length) {
-          answer += `. ${upperFirst(contents[1].answer)}`;
+          answer += `. ${upperFirst(contents[1].translate_text)}`;
         } else {
           const maxContent = maxBy(contents, function (item) {
             return item.answer.length;
           });
-          answer += maxContent.answer;
+          answer += maxContent.translate_text;
         }
       }
       setAnswer(answer);
@@ -70,7 +70,7 @@ function Chat() {
       const maxContent = maxBy(contents, function (item) {
         return item.answer.length;
       });
-      setAnswer(maxContent.answer);
+      setAnswer(maxContent.translate_text);
     }
 
     setLoading(false);
