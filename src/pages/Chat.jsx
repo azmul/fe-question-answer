@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { Button, Form, Input, Select } from "antd";
-import { minBy, maxBy, upperFirst } from "lodash";
+import { languages } from "../constant";
 import Typewriter from "typewriter-effect";
 import Header from "../components/Header/Header";
 import { useStore } from "../Store";
 import { API_URL } from "../constant";
-import { calculateSimilarity } from "../helpers/similarity";
 
 function Chat() {
-  const [answer, setAnswer] = useState(null);
+  const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const { user } = useStore((state) => {
@@ -18,7 +17,7 @@ function Chat() {
   });
 
   const onFinish = async (values) => {
-    setAnswer(null);
+    setContent(null);
     setLoading(true);
     const rawResponse = await fetch(`${API_URL}/api/v1/answers`, {
       method: "POST",
@@ -34,45 +33,7 @@ function Chat() {
     });
     const response = await rawResponse.json();
 
-    const minContent = minBy(response.data, function (item) {
-      return item.answer.length;
-    });
-
-    const contents = response.data.filter(
-      (item) => item.model != minContent.model
-    );
-
-    const similarity = calculateSimilarity(
-      contents[0].answer,
-      contents[1].answer
-    );
-
-    if (similarity < 50) {
-      let answer = "";
-      if (contents[0].answer.length > 30) {
-        answer += upperFirst(contents[0].translate_text);
-      }
-      if (contents[1].answer.length > 30) {
-        answer += `. ${upperFirst(contents[1].translate_text)}`;
-      }
-      if (contents[0].answer.length < 30 && contents[1].answer.length < 30) {
-        if (contents[0].answer.length === contents[1].answer.length) {
-          answer += `. ${upperFirst(contents[1].translate_text)}`;
-        } else {
-          const maxContent = maxBy(contents, function (item) {
-            return item.answer.length;
-          });
-          answer += maxContent.translate_text;
-        }
-      }
-      setAnswer(answer);
-    } else {
-      const maxContent = maxBy(contents, function (item) {
-        return item.answer.length;
-      });
-      setAnswer(maxContent.translate_text);
-    }
-
+    setContent(response);
     setLoading(false);
   };
 
@@ -105,26 +66,7 @@ function Chat() {
               },
             ]}
           >
-            <Select
-              options={[
-                {
-                  value: "en",
-                  label: "English",
-                },
-                {
-                  value: "bn",
-                  label: "Bangla",
-                },
-                {
-                  value: "ar",
-                  label: "Arabic",
-                },
-                {
-                  value: "ja",
-                  label: "Japanese",
-                },
-              ]}
-            />
+            <Select options={languages} />
           </Form.Item>
           <Form.Item
             name="question"
@@ -145,10 +87,10 @@ function Chat() {
             </Button>
           </Form.Item>
         </Form>
-        {answer && (
+        {content && content.answer && (
           <Typewriter
             options={{
-              strings: answer,
+              strings: content.answer,
               autoStart: true,
               delay: 15,
             }}
